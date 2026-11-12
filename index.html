@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080b17" />
+    <title>预言薄 · 记录未来的回响</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="预言薄首页">
+          <span class="brand-mark" aria-hidden="true">✦</span>
+          <span><strong>预言薄</strong><small>RECORD THE FUTURE</small></span>
+        </a>
+        <span class="local-badge"><i></i> 仅保存于本机</span>
+      </header>
+
+      <section class="hero">
+        <div>
+          <p class="eyebrow">未来观测站 / 01</p>
+          <h1>把此刻的预感，<br /><em>留给未来揭晓。</em></h1>
+          <p class="hero-copy">写下一个你相信会发生的瞬间，等待时间给出答案。</p>
+        </div>
+        <div class="hero-orbit" aria-hidden="true"><span>∞</span><b></b><i></i></div>
+      </section>
+
+      <section class="stats" aria-label="预言统计">
+        <article class="stat stat-primary"><span>总预言</span><strong id="total-count">0</strong><small>条记录</small></article>
+        <article class="stat"><span>已完成</span><strong id="done-count">0</strong><small>已揭晓</small></article>
+        <article class="stat"><span>成功</span><strong id="success-count">0</strong><small>命中未来</small></article>
+        <article class="stat"><span>成功率</span><strong id="rate-count">—</strong><small id="rate-label">等待揭晓</small></article>
+      </section>
+
+      <div class="content-grid">
+        <section class="panel form-panel">
+          <div class="panel-title"><div><p class="eyebrow">新建记录</p><h2>写下你的预言</h2></div><span class="title-spark">✧</span></div>
+          <form id="prophecy-form" novalidate>
+            <label for="prophecy-content">预言内容 <span>*</span></label>
+            <textarea id="prophecy-content" name="content" rows="5" placeholder="例如：今年冬天，我会看到第一场雪……" maxlength="200" required></textarea>
+            <div class="field-meta"><span id="content-error" class="error" role="alert"></span><span id="char-count">0 / 200</span></div>
+            <label for="prophecy-date">预计揭晓日期 <span>*</span></label>
+            <input id="prophecy-date" name="date" type="date" required />
+            <span id="date-error" class="error" role="alert"></span>
+            <button class="primary-button" type="submit"><span>＋</span> 收录这条预言</button>
+            <p class="form-note">你的记录只会保存在当前浏览器中，不会上传任何地方。</p>
+          </form>
+        </section>
+
+        <section class="panel list-panel">
+          <div class="list-heading">
+            <div><p class="eyebrow">时间档案</p><h2>我的预言 <span id="list-count">0</span></h2></div>
+            <select id="sort-select" aria-label="排序方式"><option value="date-asc">日期最近</option><option value="date-desc">日期最远</option><option value="created-desc">最新添加</option></select>
+          </div>
+          <div class="filters" role="group" aria-label="筛选预言"><button class="filter active" data-filter="all">全部 <b>0</b></button><button class="filter" data-filter="pending">未揭晓 <b>0</b></button><button class="filter" data-filter="success">成功 <b>0</b></button><button class="filter" data-filter="failed">失败 <b>0</b></button></div>
+          <div id="prophecy-list" class="prophecy-list" aria-live="polite"></div>
+          <div id="toast" class="toast" role="status"></div>
+        </section>
+      </div>
+      <footer><span>预言薄 · 你的未来，由你记录</span><span>LOCAL / PRIVATE / YOURS</span></footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
