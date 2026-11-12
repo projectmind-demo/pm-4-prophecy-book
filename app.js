@@ -26,6 +26,7 @@ function render() {
   $('#total-count').textContent = counts.total;
   $('#done-count').textContent = counts.success + counts.failed;
   $('#success-count').textContent = counts.success;
+  $('#failed-count').textContent = counts.failed;
   $('#rate-count').textContent = counts.success + counts.failed ? `${Math.round(counts.success / (counts.success + counts.failed) * 100)}%` : '—';
   $('#rate-label').textContent = counts.success + counts.failed ? '已完成预言' : '等待揭晓';
   const countByFilter = { all: counts.total, pending: counts.pending, success: counts.success, failed: counts.failed };
@@ -34,7 +35,7 @@ function render() {
   const visible = activeFilter === 'all' ? sorted : sorted.filter((record) => record.status === activeFilter);
   $('#list-count').textContent = visible.length;
   if (!visible.length) { list.innerHTML = `<div class="empty"><div class="empty-icon">✧</div><h3>${records.length ? '这里暂时没有匹配的预言' : '未来还没有被写下'}</h3><p>${records.length ? '换一个筛选条件，看看其他时间线。' : '在左侧写下第一条预言，让时间开始回应。'}</p></div>`; return; }
-  list.innerHTML = visible.map((record) => `<article class="prophecy-card ${record.status}"><span class="bar"></span><div><p class="prophecy-content">${escapeHtml(record.content)}</p><span class="date">预计揭晓 · ${formatDate(record.date)}</span></div><div class="status-actions"><button class="status-chip ${record.status === 'success' ? 'success' : ''}" data-id="${record.id}" data-status="success">${record.status === 'success' ? '✓ 成功' : '成功'}</button><button class="status-chip ${record.status === 'failed' ? 'failed' : ''}" data-id="${record.id}" data-status="failed">${record.status === 'failed' ? '× 失败' : '失败'}</button><button class="status-chip" data-id="${record.id}" data-status="pending">未揭晓</button><button class="delete-button" data-delete="${record.id}" aria-label="删除这条预言" title="删除">⌫</button></div></article>`).join('');
+  list.innerHTML = visible.map((record) => `<article class="prophecy-card ${record.status}"><span class="bar"></span><div><p class="prophecy-content">${escapeHtml(record.content)}</p><span class="date">预计揭晓 · ${formatDate(record.date)}</span></div><div class="status-actions"><button class="status-chip ${record.status === 'success' ? 'success' : ''}" data-id="${record.id}" data-status="success" aria-pressed="${record.status === 'success'}">${record.status === 'success' ? '✓ 成功' : '成功'}</button><button class="status-chip ${record.status === 'failed' ? 'failed' : ''}" data-id="${record.id}" data-status="failed" aria-pressed="${record.status === 'failed'}">${record.status === 'failed' ? '× 失败' : '失败'}</button><button class="status-chip ${record.status === 'pending' ? 'pending' : ''}" data-id="${record.id}" data-status="pending" aria-pressed="${record.status === 'pending'}">${record.status === 'pending' ? '✓ 未揭晓' : '未揭晓'}</button><button class="delete-button" data-delete="${record.id}" aria-label="删除这条预言" title="删除">⌫</button></div></article>`).join('');
 }
 function showToast(message) { const toast = $('#toast'); toast.textContent = message; toast.classList.add('show'); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove('show'), 2400); }
 function validate() {
