@@ -4,7 +4,6 @@
   "private": true,
   "description": "预言薄：记录、追踪并揭晓未来预言的本地单页应用",
   "scripts": {
-    "start": "node server.mjs",
-    "build": "node --check app.js && node --check server.mjs"
+    "build": "node --check app.js"
   }
 }
