@@ -12,7 +12,7 @@
     <div class="ambient ambient-two"></div>
     <main class="shell">
       <header class="topbar">
-        <a class="brand" href="/" aria-label="预言薄首页">
+        <a class="brand" href="index.html" aria-label="预言薄首页">
           <span class="brand-mark" aria-hidden="true">✦</span>
           <span><strong>预言薄</strong><small>记录未来</small></span>
         </a>
@@ -75,12 +75,16 @@
       <section class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
         <div class="panel-title"><div><p class="eyebrow">新建记录</p><h2 id="modal-title">写下你的预言</h2><p class="modal-description" id="modal-description">把此刻的预感交给未来，等它在某一天揭晓。</p></div><button class="modal-close" id="close-form-button" type="button" aria-label="关闭新建记录面板">×</button></div>
         <form id="prophecy-form" novalidate>
-          <label for="prophecy-content">预言内容 <span>*</span></label>
-          <textarea id="prophecy-content" name="content" rows="5" placeholder="例如：今年冬天，我会看到第一场雪……" maxlength="200" required></textarea>
-          <div class="field-meta"><span id="content-error" class="error" role="alert"></span><span id="char-count">0 / 200</span></div>
-          <label for="prophecy-date">预计揭晓日期 <span>*</span></label>
-          <input id="prophecy-date" name="date" type="date" required />
-          <span id="date-error" class="error" role="alert"></span>
+          <div class="form-field">
+            <label for="prophecy-content">预言内容 <span>*</span></label>
+            <textarea id="prophecy-content" name="content" rows="5" placeholder="例如：今年冬天，我会看到第一场雪……" maxlength="200" required aria-describedby="content-error char-count"></textarea>
+            <div class="field-meta"><span id="content-error" class="error" role="alert"></span><span id="char-count">0 / 200</span></div>
+          </div>
+          <div class="form-field">
+            <label for="prophecy-date">预计揭晓日期 <span>*</span></label>
+            <input id="prophecy-date" name="date" type="date" required aria-describedby="date-error" />
+            <span id="date-error" class="error" role="alert"></span>
+          </div>
           <button class="primary-button" type="submit"><span>＋</span> 收录这条预言</button>
           <p class="form-note">你的记录只会保存在当前浏览器中，不会上传任何地方。</p>
         </form>
