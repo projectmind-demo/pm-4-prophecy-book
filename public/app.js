@@ -7,6 +7,10 @@ const form = $('#prophecy-form');
 const contentInput = $('#prophecy-content');
 const dateInput = $('#prophecy-date');
 const list = $('#prophecy-list');
+const modal = $('#record-modal');
+const openFormButton = $('#open-form-button');
+const closeFormButton = $('#close-form-button');
+let lastFocusedElement = openFormButton;
 
 function loadRecords() {
   try {
@@ -38,13 +42,19 @@ function render() {
   list.innerHTML = visible.map((record) => `<article class="prophecy-card ${record.status}"><span class="bar"></span><div><p class="prophecy-content">${escapeHtml(record.content)}</p><span class="date">预计揭晓 · ${formatDate(record.date)}</span></div><div class="status-actions"><button class="status-chip ${record.status === 'success' ? 'success' : ''}" data-id="${record.id}" data-status="success" aria-pressed="${record.status === 'success'}">${record.status === 'success' ? '✓ 成功' : '成功'}</button><button class="status-chip ${record.status === 'failed' ? 'failed' : ''}" data-id="${record.id}" data-status="failed" aria-pressed="${record.status === 'failed'}">${record.status === 'failed' ? '× 失败' : '失败'}</button><button class="status-chip ${record.status === 'pending' ? 'pending' : ''}" data-id="${record.id}" data-status="pending" aria-pressed="${record.status === 'pending'}">${record.status === 'pending' ? '✓ 未揭晓' : '未揭晓'}</button><button class="delete-button" data-delete="${record.id}" aria-label="删除这条预言" title="删除">⌫</button></div></article>`).join('');
 }
 function showToast(message) { const toast = $('#toast'); toast.textContent = message; toast.classList.add('show'); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove('show'), 2400); }
+function openModal() { lastFocusedElement = document.activeElement; modal.hidden = false; document.body.classList.add('modal-open'); contentInput.focus(); }
+function closeModal() { modal.hidden = true; document.body.classList.remove('modal-open'); lastFocusedElement?.focus(); }
 function validate() {
   const content = contentInput.value.trim(); const date = dateInput.value; let valid = true;
   $('#content-error').textContent = content ? '' : '请先写下预言内容'; $('#date-error').textContent = date ? '' : '请选择预计揭晓日期';
   if (!content || !date) valid = false; return valid;
 }
 contentInput.addEventListener('input', () => { $('#char-count').textContent = `${contentInput.value.length} / 200`; if (contentInput.value.trim()) $('#content-error').textContent = ''; });
-form.addEventListener('submit', (event) => { event.preventDefault(); if (!validate()) return; records.unshift({ id: crypto.randomUUID(), content: contentInput.value.trim(), date: dateInput.value, status: 'pending', createdAt: Date.now() }); saveRecords(); form.reset(); $('#char-count').textContent = '0 / 200'; render(); showToast('预言已收录，等待未来揭晓'); });
+form.addEventListener('submit', (event) => { event.preventDefault(); if (!validate()) return; records.unshift({ id: crypto.randomUUID(), content: contentInput.value.trim(), date: dateInput.value, status: 'pending', createdAt: Date.now() }); saveRecords(); form.reset(); $('#char-count').textContent = '0 / 200'; render(); closeModal(); showToast('预言已收录，等待未来揭晓'); });
+openFormButton.addEventListener('click', openModal);
+closeFormButton.addEventListener('click', closeModal);
+modal.addEventListener('click', (event) => { if (event.target.dataset.closeModal) closeModal(); });
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !modal.hidden) closeModal(); });
 document.addEventListener('click', (event) => { const filter = event.target.closest('.filter'); if (filter) { activeFilter = filter.dataset.filter; render(); return; } const action = event.target.closest('[data-status]'); if (action) { const record = records.find((item) => item.id === action.dataset.id); if (record && record.status !== action.dataset.status) { record.status = action.dataset.status; saveRecords(); render(); showToast(action.dataset.status === 'pending' ? '已恢复为未揭晓' : `状态已更新为${action.dataset.status === 'success' ? '成功' : '失败'}`); } return; } const deletion = event.target.closest('[data-delete]'); if (deletion) { const record = records.find((item) => item.id === deletion.dataset.delete); if (record && window.confirm('确定删除这条预言吗？删除后无法恢复。')) { records = records.filter((item) => item.id !== record.id); saveRecords(); render(); showToast('预言已删除'); } } });
 $('#sort-select').addEventListener('change', render);
 render();
