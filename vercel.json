@@ -1,6 +1,15 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": "npm run build",
-  "outputDirectory": "public"
+  "builds": [
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
 }
