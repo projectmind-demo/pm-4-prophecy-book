@@ -1,3 +1,6 @@
+// The app is static, but keeping the browser-only code behind this guard also
+// makes the bundle safe if a platform probes the script with a Node runtime.
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
 const STORAGE_KEY = 'prophecy-book.records.v1';
 let records = loadRecords();
 let activeFilter = 'all';
@@ -73,3 +76,4 @@ document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && 
 document.addEventListener('click', (event) => { const filter = event.target.closest('.filter'); if (filter) { activeFilter = filter.dataset.filter; render(); return; } const action = event.target.closest('[data-status]'); if (action) { const record = records.find((item) => item.id === action.dataset.id); if (record && record.status !== action.dataset.status) { record.status = action.dataset.status; saveRecords(); render(); showToast(action.dataset.status === 'pending' ? '已恢复为未揭晓' : `状态已更新为${action.dataset.status === 'success' ? '成功' : '失败'}`); } return; } const deletion = event.target.closest('[data-delete]'); if (deletion) { const record = records.find((item) => item.id === deletion.dataset.delete); if (record && window.confirm('确定删除这条预言吗？删除后无法恢复。')) { records = records.filter((item) => item.id !== record.id); saveRecords(); render(); showToast('预言已删除'); } } });
 $('#sort-select').addEventListener('change', render);
 render();
+}
