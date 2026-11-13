@@ -34,7 +34,27 @@
         <article class="stat"><span>已完成</span><strong id="done-count">0</strong><small>已揭晓</small></article>
         <article class="stat"><span>成功</span><strong id="success-count">0</strong><small>命中未来</small></article>
         <article class="stat"><span>失败</span><strong id="failed-count">0</strong><small>未命中未来</small></article>
-        <article class="stat"><span>成功率</span><strong id="rate-count">—</strong><small id="rate-label">等待揭晓</small></article>
+        <article class="stat rate-stat" id="rate-stat" aria-labelledby="rate-title">
+          <div class="rate-heading"><span id="rate-title">成功率</span><span class="rate-signal" aria-hidden="true"><i></i> LIVE</span></div>
+          <div class="rate-meter" id="rate-meter" role="img" aria-label="成功率等待揭晓">
+            <svg class="rate-ring" viewBox="0 0 128 128" aria-hidden="true">
+              <defs>
+                <linearGradient id="rate-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#67d4ff" />
+                  <stop offset="55%" stop-color="#7f9cff" />
+                  <stop offset="100%" stop-color="#c18bff" />
+                </linearGradient>
+              </defs>
+              <circle class="rate-track" cx="64" cy="64" r="54" />
+              <circle class="rate-progress" id="rate-progress" cx="64" cy="64" r="54" pathLength="100" />
+            </svg>
+            <div class="rate-center"><strong id="rate-count">—</strong><small id="rate-label">等待揭晓</small></div>
+            <span class="rate-particle particle-one" aria-hidden="true"></span>
+            <span class="rate-particle particle-two" aria-hidden="true"></span>
+            <span class="rate-particle particle-three" aria-hidden="true"></span>
+          </div>
+          <p class="rate-detail" id="rate-detail">完成记录后，仪表将开始运行</p>
+        </article>
       </section>
 
       <div class="content-grid">

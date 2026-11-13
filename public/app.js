@@ -25,14 +25,29 @@ function escapeHtml(value) { return value.replace(/[&<>'"]/g, (char) => ({ '&':'
 function getCounts() {
   return { total: records.length, pending: records.filter((r) => r.status === 'pending').length, success: records.filter((r) => r.status === 'success').length, failed: records.filter((r) => r.status === 'failed').length };
 }
+function updateRate(counts) {
+  const completed = counts.success + counts.failed;
+  const hasResults = completed > 0;
+  const rate = hasResults ? Math.round(counts.success / completed * 100) : 0;
+  const rateStat = $('#rate-stat');
+  const rateProgress = $('#rate-progress');
+  const rateMeter = $('#rate-meter');
+  rateProgress.style.setProperty('--rate-progress', rate);
+  rateStat.classList.toggle('is-empty', !hasResults);
+  rateStat.classList.toggle('is-low', hasResults && rate < 50);
+  rateStat.classList.toggle('is-high', hasResults && rate >= 80);
+  $('#rate-count').textContent = hasResults ? `${rate}%` : '—';
+  $('#rate-label').textContent = hasResults ? '命中指数' : '等待揭晓';
+  $('#rate-detail').textContent = hasResults ? `${counts.success} 成功 · ${counts.failed} 失败` : '完成记录后，仪表将开始运行';
+  rateMeter.setAttribute('aria-label', hasResults ? `成功率 ${rate}%，${counts.success} 次成功，${counts.failed} 次失败` : '成功率等待揭晓');
+}
 function render() {
   const counts = getCounts();
   $('#total-count').textContent = counts.total;
   $('#done-count').textContent = counts.success + counts.failed;
   $('#success-count').textContent = counts.success;
   $('#failed-count').textContent = counts.failed;
-  $('#rate-count').textContent = counts.success + counts.failed ? `${Math.round(counts.success / (counts.success + counts.failed) * 100)}%` : '—';
-  $('#rate-label').textContent = counts.success + counts.failed ? '已完成预言' : '等待揭晓';
+  updateRate(counts);
   const countByFilter = { all: counts.total, pending: counts.pending, success: counts.success, failed: counts.failed };
   document.querySelectorAll('.filter').forEach((button) => { button.classList.toggle('active', button.dataset.filter === activeFilter); button.querySelector('b').textContent = countByFilter[button.dataset.filter]; });
   const sorted = [...records].sort((a, b) => { const sort = $('#sort-select').value; return sort === 'created-desc' ? b.createdAt - a.createdAt : sort === 'date-desc' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date); });
