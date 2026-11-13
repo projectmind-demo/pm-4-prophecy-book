@@ -1,1 +1,6 @@
-{"outputDirectory":"public"}
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "public"
+}
